@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./app.css";
+import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
+
+// Import Authenticator as a client component to avoid SSR issues
+const AuthenticatorClient = dynamic(
+  () => import("../components/AuthenticatorClient"),
+  { ssr: false }
+);
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +23,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <AuthenticatorClient>
+          {children}
+        </AuthenticatorClient>
+      </body>
     </html>
   );
 }
